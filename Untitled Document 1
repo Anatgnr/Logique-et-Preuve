@@ -1,0 +1,11 @@
+Explication des tactiques utilisées: 
+  intro: utilisation de la regle d'introduction pour changer de but 
+  apply: utilisation d'une implication qui a la bonne conclusion
+     (il va falloir prouver ses hypotheses) 
+ Note: on ne peut faire "apply" que sur une propriété déjà prouvée,
+     contrairement au modus ponens des preuves en arbres 
+   C'est automatiquement un modus ponens: "apply Hpqr" pour prouver R
+     demande à prouver P et Q 
+   assumption: utilisation de la regle d'hypothese
+   assert: regle cut (on se concentre sur un cas en particulier et une fois prouvé, on le garde en hypothèse)
+   
