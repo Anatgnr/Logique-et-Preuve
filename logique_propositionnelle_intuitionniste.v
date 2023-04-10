@@ -4,12 +4,17 @@ Require Import Setoid.
 Section LJ.
  Variables P Q R S T : Prop.
  (*  Tactiques pour la conjonction 
+__________________________________________________________________________________________
+__________________________________________________________________________________________
 
     Introduction : pour prouver A /\ B : split (il faudra prouver A, puis B)
     Elimination : destruct H, si H : A /\ B 
                   variante : destruct H as [H1 H2].
         Dans les deux cas, on récupère deux hypothèses pour A et B (et on 
         choisit leurs noms, pour la variante "as..")
+__________________________________________________________________________________________
+__________________________________________________________________________________________
+
   *)
  Lemma and_comm : P /\ Q -> Q /\ P.
  Proof.
@@ -18,7 +23,11 @@ Section LJ.
    split; assumption. (* "assumption" résout les deux sous-buts *)
  Qed.
 
- (* tactiques pour la disjonction 
+ (* 
+__________________________________________________________________________________________
+__________________________________________________________________________________________
+
+ tactiques pour la disjonction 
     Introduction:
      pour prouver A \/ B a partir de A : left
      pour prouver A \/ B a partir de B : right
@@ -27,6 +36,8 @@ Section LJ.
      preuve par cas : destruct H, si H: A \/ B
                       variante : destruct H as [H1 | H2]
         On aura a faire deux preuves, une pour chaque cas (cas A, cas B)
+__________________________________________________________________________________________
+__________________________________________________________________________________________
   *)
 
   Lemma or_not : P \/ Q -> ~P -> Q.
@@ -49,10 +60,16 @@ Section LJ.
      utiles quand on a plusieurs sous-preuves non triviales;
      améliorent la lisibilité du script *)
   
-   (*  equivalence logique (<->, iff):
+   (* 
+__________________________________________________________________________________________
+__________________________________________________________________________________________
+ 
+   equivalence logique (<->, iff):
        unfold iff transforme A <-> B en
                              (A -> B) /\ (B -> A).
        donc split, destruct, etc, marchent
+__________________________________________________________________________________________
+__________________________________________________________________________________________
 
        (iff pour "if and only if", le "si et seulement si" en anglais)
     *)
@@ -167,33 +184,105 @@ Section LJ.
 
   Lemma and_or_dist : P /\ (Q \/ R) <-> P /\ Q \/ P /\ R.
   Proof.
+    unfold iff.
     split.
+    intro.
+    destruct H.
+    destruct H0.
+    -left.
+      split.
+      assumption. assumption.
+    - right.
+      split.
+      assumption. assumption.
     - intro.
+    destruct H.
+    destruct H.
+    split.
+    assumption.
+    left.
+    assumption.
+    split.
+    destruct H.
+    assumption.
+    destruct H.
+    right.
+    assumption.
   Qed.
 
   Lemma or_and_dist : P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
   Proof.
-    tauto.
+    split.
+    - intro.
+      destruct H.
+      split.
+      left. assumption.
+      left. assumption.
+      destruct H.
+      split.
+      right. assumption.
+      right. assumption.
+    - intro.
+      destruct H.
+      destruct H.
+      destruct H0.
+      left. assumption.
+      left. assumption.
+      destruct H0.
+      left. assumption.
+      right.
+      split. assumption. assumption.
   Qed.
 
   Lemma and_not_not_impl: P /\ ~ Q -> ~(P -> Q).
   Proof.
-    tauto.
+    intro.
+    destruct H.
+    unfold not.
+    intro.
+    apply H0.
+    apply H1.
+    assumption.
   Qed.
 
   Lemma de_morgan1 : ~ (P \/ Q) <-> ~P /\ ~Q.
   Proof.
-    tauto.
+    unfold iff.
+    split.
+    intro.
+    split.
+    intro.
+    apply H.
+    left.
+    assumption.
+    intro.
+    apply H.
+    right.
+    assumption.
+    intro.
+    destruct H.
+    unfold not.
+    intro.
+    destruct H1.
+    apply H.
+    assumption.
+    apply H0.
+    assumption.
   Qed.
 
   Lemma reductio_ad_absurdum: (P -> ~P) -> ~P.
   Proof.
-    tauto.
+    intro.
+    intro.
+    apply H.
+    apply H0.
+    assumption.
   Qed.
 
   Lemma np_p_nnp: (~P -> P) -> ~~P.
   Proof.
-    tauto.
+    intro.
+    intro; apply H0. apply H; assumption.
   Qed.
 
   (* Exercice: reprendre toutes les preuves précédentes, 
